@@ -1,6 +1,6 @@
 # Vet
 
-**A web vulnerability checker whole domain.**
+**A web vulnerability checker across a domain.**
 
 Vet tests web inputs for injection flaws like XSS and SQLi and for missing protections
 like rate limiting. **Target** to check a single endpoint's fields, or
