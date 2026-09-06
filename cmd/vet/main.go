@@ -12,7 +12,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/terrdv/vet-mcp/internal/crawler"
+	"github.com/terrdv/vet/internal/crawler"
 )
 
 const usage = `vet - web vulnerability checker
@@ -79,6 +79,7 @@ func runScan(ctx context.Context, args []string) error {
 	domain := fs.String("domain", "", "domain root URL to crawl (required)")
 	scope := fs.String("scope", "", "host:port allowed in scope (required)")
 	workers := fs.Int("workers", 8, "number of concurrent crawl workers")
+	sequential := fs.Bool("sequential", false, "use the single-threaded crawler (ignores --workers)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -87,10 +88,12 @@ func runScan(ctx context.Context, args []string) error {
 		return fmt.Errorf("scan: --domain and --scope are required")
 	}
 
-	_ = *workers // TODO: concurrency not wired up yet
-
 	c := crawler.NewCrawl()
-	c.Crawl(ctx, *domain)
+	if *sequential {
+		c.CrawlSequential(ctx, *domain)
+	} else {
+		c.Crawl(ctx, *domain, *workers)
+	}
 
 	forms := c.Forms()
 	fmt.Printf("discovered %d injection point(s):\n", len(forms))

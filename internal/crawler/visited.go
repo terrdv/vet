@@ -37,6 +37,12 @@ func (v *VisitedSet) Remove(url string) {
 	delete(v.set, url)
 }
 
+func (v *VisitedSet) Exists(url string) bool {
+	v.mx.Lock()
+	defer v.mx.Unlock()
+	_, seen := v.set[url]
+        return seen
+}
 
 
 

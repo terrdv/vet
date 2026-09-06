@@ -1,4 +1,4 @@
-module github.com/terrdv/vet-mcp
+module github.com/terrdv/vet
 
 go 1.25.0
 

@@ -5,7 +5,7 @@
 Vet tests web inputs for injection flaws like XSS and SQLi and for missing protections
 like rate limiting. **Target** to check a single endpoint's fields, or
 **crawl** to test every endpoint across a domain. Both are
-available through a **CLI** and through an **MCP server**.
+available through the **CLI**.
 
 ---
 
@@ -64,16 +64,15 @@ engine's job. Keeping them separate is what makes both modes fall out of one cod
 ## Project structure
 
 ```
-vet-mcp/
+vet/
 ├── cmd/
-│   ├── vet/          # CLI entrypoint — check + scan subcommands, calls engine
-│   └── vet-mcp/      # MCP server entrypoint — tool handlers, calls engine
+│   └── vet/          # CLI entrypoint — check + scan subcommands, calls engine
 └── internal/
     ├── engine/       # orchestration: run checks against injection points, collect findings
     ├── checks/       # one file per vulnerability class (pluggable Check interface)
     ├── crawler/      # concurrent attack-surface discovery, feeds the engine
     ├── httpx/        # HTTP client wrapper: rate limiting + scope enforcement
-    └── finding/      # the finding schema (shared contract for CLI + MCP output)
+    └── finding/      # the finding schema (shared contract for check + scan output)
 ```
 
 ---
