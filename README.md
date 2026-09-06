@@ -9,6 +9,53 @@ available through the **CLI**.
 
 ---
 
+## How it works
+
+### The crawler
+
+Crawl mode is a worker pool that discovers a domain's attack surface. Both a
+single-threaded and a concurrent crawler ship in the tree, walking the same frontier
+with the same scope and dedup rules — `--sequential` selects the former.
+
+<table>
+<tr>
+<td width="50%" align="center"><b>Single-threaded</b></td>
+<td width="50%" align="center"><b>Concurrent</b></td>
+</tr>
+<tr>
+<td><img src="docs/images/crawl-sequential.svg" alt="Single-threaded crawl" width="100%"></td>
+<td><img src="docs/images/crawl-concurrent.svg" alt="Concurrent crawl" width="100%"></td>
+</tr>
+</table>
+
+The loop is identical; the stop condition is not. With one goroutine, an empty queue is
+proof the crawl is over. With N workers an empty queue instead means "the others
+are mid-fetch and about to refill it", so termination is tracked by a counter of
+outstanding URLs. A URL is counted when it's enqueued and retired only after the links
+it discovered are themselves counted, so the count cannot reach zero while the crawl is
+still alive. Zero means no work in flight and no worker able to produce more — the
+moment it's safe to close the queue and let every worker exit.
+
+- **Scope enforcement at the frontier** — URLs outside the allowlist are never enqueued.
+- **Canonicalization + dedup** — `?id=1` and `?id=2` aren't scanned as separate pages forever; a visited set (guarded for concurrent access) keeps the crawl finite.
+- **Form + link discovery** — extracts links to follow and forms/params to test.
+- **Politeness** — per-host rate limiting and backoff so a scan doesn't look like an attack.
+
+The crawler's only job is to *find* injection points; testing them is the detection
+engine's job. Keeping them separate is what makes both modes fall out of one codebase.
+
+> Note: crawl mode currently follows server-rendered links and forms. JavaScript-rendered
+> single-page apps (which need a headless browser) are a later addition — server-rendered
+> targets like DVWA are fully covered.
+
+### How detection actually works
+
+N/A for now
+
+---
+
+## Usage
+
 **Targeted** — Supply one endpoint and the fields to test.
 
 ```bash
@@ -35,30 +82,6 @@ vet scan --domain http://localhost:8080 --scope localhost:8080
 | **SQLi (time-based / blind)** | N/A | N/A |
 | **Missing rate limiting** | N/A | N/A |
 
-
-### How detection actually works
-
-N/A for now
-
----
-
-## The crawler
-
-Crawl mode is a concurrent worker pool that discovers a domain's attack surface:
-
-- **Scope enforcement at the frontier** — URLs outside the allowlist are never enqueued.
-- **Canonicalization + dedup** — `?id=1` and `?id=2` aren't scanned as separate pages forever; a visited set (guarded for concurrent access) keeps the crawl finite.
-- **Form + link discovery** — extracts links to follow and forms/params to test.
-- **Politeness** — per-host rate limiting and backoff so a scan doesn't look like an attack.
-- **Clean termination** — the crawl ends when there's no work in flight *and* no worker about to produce more (workers are both consumers and producers of URLs — getting this right is the crux).
-
-The crawler's only job is to *find* injection points; testing them is the detection
-engine's job. Keeping them separate is what makes both modes fall out of one codebase.
-
-> Note: crawl mode currently follows server-rendered links and forms. JavaScript-rendered
-> single-page apps (which need a headless browser) are a later addition — server-rendered
-> targets like DVWA are fully covered.
-
 ---
 
 ## Project structure
@@ -67,6 +90,7 @@ engine's job. Keeping them separate is what makes both modes fall out of one cod
 vet/
 ├── cmd/
 │   └── vet/          # CLI entrypoint — check + scan subcommands, calls engine
+├── docs/images/      # diagrams used by this README
 └── internal/
     ├── engine/       # orchestration: run checks against injection points, collect findings
     ├── checks/       # one file per vulnerability class (pluggable Check interface)

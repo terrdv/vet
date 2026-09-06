@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 840" width="760" height="840" role="img">
+<style>
+  :root { color-scheme: light dark; }
+  .bg { fill:#fdfcfa; stroke:#e7e5e4; stroke-width:2; }
+  .ink,.acc,.mut { fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .ink { stroke:#1c1917; stroke-width:2.5; }
+  .mut { stroke:#78716c; stroke-width:2.0; }
+  .acc { stroke:#b45309; stroke-width:2.7; }
+  text { font-family:'Comic Sans MS','Chalkboard SE','Bradley Hand','Segoe Print',cursive; fill:#1c1917; }
+  text.mt { fill:#78716c; }
+  text.ac { fill:#b45309; }
+  @media (prefers-color-scheme: dark) {
+    .bg { fill:#0d1117; stroke:#26292e; }
+    .ink { stroke:#e7e5e4; }
+    .mut { stroke:#a8a29e; }
+    .acc { stroke:#fbbf24; }
+    text { fill:#e7e5e4; }
+    text.mt { fill:#a8a29e; }
+    text.ac { fill:#fbbf24; }
+  }
+</style>
+<rect class="bg" x="1" y="1" width="758" height="838" rx="14"/>
+<text class="tx" x="60" y="52" font-size="25" text-anchor="start" transform="rotate(0.17 60 52)">Input Domain</text>
+<path class="mut" d="M232.7,46.9L241.6,45.0L249.5,41.8L255.8,44.1L263.6,44.2L268.8,43.7L275.8,45.4L282.9,45.9L287.7,49.3L295.2,54.1L298.0,58.1L302.7,62.2L307.0,65.5L313.2,71.9L314.9,80.7L320.2,85.7L323.4,94.1"/>
+<path class="mut" d="M232.5,45.1L241.6,44.9L249.7,44.4L255.3,42.4L262.1,41.9L268.7,43.2L276.8,43.8L283.2,46.8L287.9,51.0L293.9,52.8L299.0,57.9L302.4,63.2L306.7,67.7L313.2,71.4L316.6,78.8L319.3,84.8L320.6,93.0"/>
+<path class="mut" d="M322.6,93.6L317.0,90.9L311.9,86.5"/>
+<path class="mut" d="M321.8,94.0L317.0,89.8L311.6,87.1"/>
+<path class="mut" d="M322.5,93.4L324.6,87.2L325.7,81.8"/>
+<path class="mut" d="M322.6,93.8L324.6,87.9L325.7,81.4"/>
+<text class="mt" x="330" y="22" font-size="19" text-anchor="middle" transform="rotate(-0.45 330 22)">seed</text>
+<path class="ink" d="M238.6,98.8L440.6,101.7L438.8,186.5L241.7,188.1Z"/>
+<path class="ink" d="M239.7,99.1L440.3,101.1L439.8,187.7L238.5,189.4Z"/>
+<text class="tx" x="340" y="154" font-size="29" text-anchor="middle" transform="rotate(-0.65 340 154)">Queue</text>
+<text class="mt" x="378" y="214" font-size="20" text-anchor="start" transform="rotate(-0.01 378 214)">pop</text>
+<text class="mt" x="378" y="238" font-size="18" text-anchor="start" transform="rotate(0.47 378 238)">empty ⇒ done</text>
+<path class="ink" d="M338.8,194.7L341.4,219.4L340.9,242.7"/>
+<path class="ink" d="M339.8,192.9L341.1,218.3L339.9,245.6"/>
+<path class="ink" d="M340.5,244.7L336.0,238.8L332.5,233.6"/>
+<path class="ink" d="M339.7,243.9L335.6,238.6L332.9,234.2"/>
+<path class="ink" d="M340.2,244.0L343.7,238.2L347.5,234.0"/>
+<path class="ink" d="M340.5,243.8L344.3,239.2L348.1,233.8"/>
+<path class="ink" d="M188.9,251.5L492.7,251.3L492.0,368.9L188.6,367.3Z"/>
+<path class="ink" d="M189.5,252.5L492.3,250.3L492.2,367.2L188.6,367.9Z"/>
+<text class="tx" x="340" y="304" font-size="26" text-anchor="middle" transform="rotate(0.44 340 304)">one goroutine</text>
+<text class="mt" x="340" y="338" font-size="20" text-anchor="middle" transform="rotate(0.21 340 338)">(single loop)</text>
+<path class="ink" d="M341.0,373.5L340.5,401.8L341.1,427.5"/>
+<path class="ink" d="M341.1,375.2L340.6,402.5L341.5,428.1"/>
+<path class="ink" d="M340.0,427.5L336.6,423.4L332.2,417.9"/>
+<path class="ink" d="M340.3,428.3L335.7,423.2L332.3,417.8"/>
+<path class="ink" d="M339.9,428.2L344.3,423.0L348.1,416.9"/>
+<path class="ink" d="M339.5,427.9L344.1,422.4L348.0,417.8"/>
+<text class="tx" x="340" y="460" font-size="27" text-anchor="middle" transform="rotate(-0.64 340 460)">Fetch &amp; Parse page</text>
+<path class="ink" d="M231.9,479.2L220.6,483.9L211.7,489.1L202.1,493.8L194.0,500.0L186.0,505.9L176.7,512.1L168.3,515.9L161.8,521.2L154.4,527.9L148.7,531.0L143.2,536.6L137.3,542.9L132.0,550.3L127.7,554.4L123.1,560.7L117.6,564.9"/>
+<path class="ink" d="M232.3,480.2L223.3,486.4L212.6,489.6L204.2,493.7L192.9,500.6L186.0,504.5L177.9,512.0L169.4,515.9L161.7,520.9L157.0,526.5L150.4,533.6L143.2,537.1L138.6,543.4L131.5,548.4L128.2,554.6L121.6,560.2L116.9,566.4"/>
+<path class="ink" d="M117.9,565.7L118.2,560.0L116.9,553.1"/>
+<path class="ink" d="M117.7,566.6L118.2,559.1L117.2,552.5"/>
+<path class="ink" d="M118.7,565.7L124.3,563.9L130.5,562.0"/>
+<path class="ink" d="M118.3,565.5L124.5,563.7L130.4,561.7"/>
+<text class="tx" x="112" y="606.0" font-size="21" text-anchor="middle" transform="rotate(-0.28 112 606.0)">extract</text>
+<text class="tx" x="112" y="634.35" font-size="21" text-anchor="middle" transform="rotate(0.04 112 634.35)">injection points</text>
+<path class="ink" d="M339.9,479.6L340.8,513.3L338.5,545.2"/>
+<path class="ink" d="M339.9,481.3L341.2,513.1L338.4,546.9"/>
+<path class="ink" d="M339.9,546.1L336.4,541.0L332.2,536.2"/>
+<path class="ink" d="M339.8,545.8L336.6,540.4L331.9,536.0"/>
+<path class="ink" d="M339.4,546.5L344.2,540.7L347.5,536.0"/>
+<path class="ink" d="M340.6,545.5L343.9,540.9L347.8,535.3"/>
+<text class="tx" x="340" y="578" font-size="25" text-anchor="middle" transform="rotate(-0.49 340 578)">extract URLs</text>
+<path class="ink" d="M340.3,599.0L338.6,624.1L341.0,652.9"/>
+<path class="ink" d="M340.5,596.5L340.7,626.5L341.6,652.6"/>
+<path class="ink" d="M339.4,652.5L335.7,647.0L332.9,641.9"/>
+<path class="ink" d="M339.5,651.7L336.7,646.3L332.4,641.5"/>
+<path class="ink" d="M339.5,652.2L343.3,646.2L347.6,641.0"/>
+<path class="ink" d="M339.4,652.1L344.2,647.3L347.3,641.5"/>
+<path class="ink" d="M261.4,658.3L418.0,659.5L417.6,736.5L262.7,736.8Z"/>
+<path class="ink" d="M262.4,658.0L419.4,658.2L418.4,737.2L262.2,737.2Z"/>
+<text class="tx" x="340" y="708" font-size="28" text-anchor="middle" transform="rotate(0.35 340 708)">Set</text>
+<path class="ink" d="M424.1,696.8L459.2,697.6L496.8,697.0L532.7,698.5L566.7,698.5L602.7,696.8L640.3,697.2L677.2,697.9"/>
+<path class="ink" d="M423.4,698.9L458.5,698.7L494.6,696.9L533.4,698.6L567.1,696.8L605.5,698.5L641.0,696.8L676.4,697.5"/>
+<path class="ink" d="M675.2,697.5L680.0,697.4L682.7,696.4L687.2,697.4L690.0,695.9L692.9,695.1L694.6,694.0L697.2,691.9L697.3,689.1L699.4,687.1L702.9,686.2L703.9,682.3L704.0,682.3L705.3,678.0L705.4,673.8L704.8,670.6L705.6,667.7"/>
+<path class="ink" d="M677.1,697.0L678.9,697.2L682.0,696.9L685.4,696.9L687.7,697.4L691.4,696.4L694.8,694.3L696.4,693.6L697.4,691.0L699.6,689.0L702.5,685.3L702.2,682.4L703.3,679.9L704.6,679.6L705.1,674.5L705.8,671.0L706.7,668.7"/>
+<path class="ink" d="M704.9,667.2L706.6,635.0L706.5,598.9L707.5,563.1L704.6,531.2L705.7,494.4L706.2,463.0L706.1,426.5L704.7,391.2L707.3,358.1L707.4,322.3L705.2,287.8L705.7,253.4L705.2,220.1L705.4,184.6"/>
+<path class="ink" d="M704.5,669.5L705.0,633.6L705.7,599.2L704.7,564.1L704.7,530.4L707.3,496.2L707.1,460.5L704.5,427.1L706.0,392.8L705.6,358.5L706.7,325.0L705.4,289.1L707.0,254.0L704.8,219.8L704.7,186.9"/>
+<path class="ink" d="M707.0,185.4L704.8,180.6L704.7,176.8L704.6,174.7L703.1,169.8L703.3,166.7L700.3,164.6L699.1,161.6L697.3,159.9L696.0,158.7L693.9,157.2L690.7,155.5L686.7,155.1L684.0,154.6L680.7,153.1L675.4,153.1L671.6,150.9"/>
+<path class="ink" d="M704.7,185.0L705.2,182.4L704.8,176.7L705.6,174.6L702.5,169.8L701.6,167.6L702.3,166.6L699.8,162.0L697.3,160.1L694.7,157.0L693.0,157.8L690.6,154.1L687.0,153.1L684.2,153.0L681.3,153.4L675.0,151.6L673.2,151.9"/>
+<path class="ink" d="M671.8,151.8L636.2,153.4L598.8,153.5L562.3,150.7L526.3,151.7L487.2,153.5L450.5,152.2"/>
+<path class="ink" d="M671.9,153.2L635.0,151.1L598.0,151.0L562.2,151.5L526.1,151.2L488.2,151.2L453.5,153.1"/>
+<path class="ink" d="M452.5,152.2L457.1,147.6L462.9,144.2"/>
+<path class="ink" d="M451.4,151.5L456.6,148.4L463.0,143.8"/>
+<path class="ink" d="M452.4,151.8L457.5,156.4L462.6,160.2"/>
+<path class="ink" d="M451.8,151.3L457.2,156.0L462.0,159.6"/>
+<text class="tx" x="556" y="486" font-size="21" text-anchor="start" transform="rotate(-0.26 556 486)">enqueue</text>
+<text class="tx" x="556" y="512" font-size="21" text-anchor="start" transform="rotate(-0.66 556 512)">if new</text>
+<path class="acc" d="M69.3,771.6L104.4,772.8L138.5,773.8L174.5,773.6L208.5,772.6L242.4,773.1L276.1,772.4L311.8,772.1L344.7,770.4L378.4,771.5L414.7,773.0L449.7,771.3L485.0,771.1L518.6,770.4L553.2,772.6L588.4,773.5L621.8,773.3L656.5,772.4L688.9,772.1"/>
+<path class="acc" d="M71.5,771.0L106.2,772.2L138.5,770.1L172.9,770.8L208.4,773.5L243.8,772.4L276.2,770.5L311.8,772.2L346.4,771.5L381.5,770.9L413.7,771.1L449.4,773.5L482.1,772.5L518.8,771.0L550.6,772.3L587.9,773.4L622.0,771.7L655.3,772.1L691.5,771.2"/>
+<text class="ac" x="380" y="806.0" font-size="21" text-anchor="middle" transform="rotate(-0.31 380 806.0)">queue empty  →  nothing can refill it</text>
+<text class="ac" x="380" y="834.35" font-size="21" text-anchor="middle" transform="rotate(0.15 380 834.35)">→  crawl is finished</text>
+</svg>
