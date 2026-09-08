@@ -14,11 +14,9 @@ reports proven vulnerabilities.
 ### The crawler
 
 The crawler follows links from a seed URL until it has seen every in-scope page,
-collecting the form fields on each. The pages are how it gets around; the fields are what
-it is after — they are the injection points the engine tests.
+collecting the form fields on each.
 
-Two crawlers ship in the tree, walking the same frontier under the same scope and dedup
-rules. `--sequential` selects the single-threaded one.
+`--sequential` selects the single-threaded one.
 
 <table>
 <tr>
