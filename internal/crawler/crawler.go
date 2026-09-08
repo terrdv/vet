@@ -23,17 +23,42 @@ type Crawler struct {
 	// scopeHost is set once in Crawl before any worker starts, then only read.
 	scopeHost string
 
+	// sink, if set, receives each page's forms as they are discovered, so a
+	// consumer can start testing them before the crawl finishes. Same discipline
+	// as scopeHost: set once before the crawl starts, then only read. It is
+	// called from every worker, so it must be safe for concurrent use.
+	sink func([]Form)
+
 	mu    sync.Mutex
 	forms []Form
 }
 
 func NewCrawl() *Crawler {
+	// Go's default transport keeps 2 idle connections per host. Against a local
+	// dev server that answers in under a millisecond, connections go idle
+	// constantly and all but two are closed, so the next request dials again --
+	// burning an ephemeral port each time, and eventually failing fetches that
+	// handle silently discards. The detection engine makes that far worse: it
+	// issues several payload requests per field, all of them fast.
+	tr := http.DefaultTransport.(*http.Transport).Clone()
+	tr.MaxIdleConnsPerHost = 64
+
 	return &Crawler{
 		q:      NewQueue(),
 		v:      NewVisitedSet(), // initializes the map so Add won't panic
-		client: &http.Client{Timeout: fetchTimeout},
+		client: &http.Client{Timeout: fetchTimeout, Transport: tr},
 	}
 }
+
+// Client returns the HTTP client the crawl uses, so whatever tests the forms it
+// finds can run on the same connection pool instead of opening a second one
+// against the same host.
+func (c *Crawler) Client() *http.Client { return c.client }
+
+// OnForms registers a sink for injection points, called once per page with the
+// forms found on it. Set it before starting a crawl; both Crawl and
+// CrawlSequential publish through it.
+func (c *Crawler) OnForms(fn func([]Form)) { c.sink = fn }
 
 // Forms returns the injection points discovered by the last Crawl.
 func (c *Crawler) Forms() []Form {
@@ -43,9 +68,18 @@ func (c *Crawler) Forms() []Form {
 }
 
 func (c *Crawler) addForms(fs []Form) {
+	if len(fs) == 0 {
+		return
+	}
+
 	c.mu.Lock()
-	defer c.mu.Unlock()
 	c.forms = append(c.forms, fs...)
+	c.mu.Unlock() // not deferred: a sink running under the lock would serialize
+	//               every worker that discovers a form
+
+	if c.sink != nil {
+		c.sink(fs)
+	}
 }
 
 // Crawl discovers the attack surface reachable from domain, using workers

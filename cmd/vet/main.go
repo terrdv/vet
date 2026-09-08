@@ -12,7 +12,10 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/terrdv/vet/internal/checks"
 	"github.com/terrdv/vet/internal/crawler"
+	"github.com/terrdv/vet/internal/engine"
+	"github.com/terrdv/vet/internal/finding"
 )
 
 const usage = `vet - web vulnerability checker
@@ -79,6 +82,7 @@ func runScan(ctx context.Context, args []string) error {
 	domain := fs.String("domain", "", "domain root URL to crawl (required)")
 	scope := fs.String("scope", "", "host:port allowed in scope (required)")
 	workers := fs.Int("workers", 8, "number of concurrent crawl workers")
+	checkWorkers := fs.Int("check-workers", 4, "number of concurrent detection workers; peak load on the target is --workers plus this")
 	sequential := fs.Bool("sequential", false, "use the single-threaded crawler (ignores --workers)")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -89,16 +93,42 @@ func runScan(ctx context.Context, args []string) error {
 	}
 
 	c := crawler.NewCrawl()
+
+	// The engine shares the crawler's client, so the two phases share one
+	// connection pool rather than competing for ephemeral ports against the
+	// same host while they run side by side.
+	eng := engine.New(c.Client(), *checkWorkers, checks.ReflectedXSS{})
+	eng.OnFinding(func(f finding.Finding) { fmt.Println(f) })
+
+	// Both must be in place before the crawl starts: the workers park on an
+	// empty queue, and the sink is only read from here on.
+	eng.Start(ctx)
+	c.OnForms(eng.SubmitForms)
+
 	if *sequential {
 		c.CrawlSequential(ctx, *domain)
 	} else {
 		c.Crawl(ctx, *domain, *workers)
 	}
 
-	forms := c.Forms()
-	fmt.Printf("discovered %d injection point(s):\n", len(forms))
-	for _, f := range forms {
-		fmt.Printf("  %-4s %s  field=%s\n", f.Method, f.Action, f.Field)
+	// The crawl is the only producer of targets, so a finished crawl is exactly
+	// the moment it is safe to say no more are coming.
+	eng.Close()
+	eng.Wait()
+
+	// Forms is one row per field per page, so the same form site-wide inflates
+	// it; Targets is what the engine actually tested after dedup.
+	fmt.Printf("\n%d form field(s) discovered, %d distinct injection point(s) tested, %d finding(s)\n",
+		len(c.Forms()), eng.Targets(), len(eng.Findings()))
+
+	// Reported separately and never folded into the finding count: these are
+	// injection points the scan could not reach a conclusion on, so the surface
+	// actually covered is smaller than the line above implies.
+	if errs := eng.Errors(); len(errs) > 0 {
+		fmt.Fprintf(os.Stderr, "\n%d check(s) could not reach a conclusion:\n", len(errs))
+		for _, e := range errs {
+			fmt.Fprintln(os.Stderr, "  "+e.Error())
+		}
 	}
 	return nil
 }
