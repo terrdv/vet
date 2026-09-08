@@ -35,16 +35,11 @@ outstanding URLs. A URL is counted when it's enqueued and decremented only after
 it discovered are themselves counted, so the count cannot reach zero while the crawl is
 still running.
 
-- **Scope enforcement at the frontier** — URLs outside the allowlist are never enqueued.
-- **Canonicalization + dedup** — `?id=1` and `?id=2` aren't scanned as separate pages forever; a visited set (guarded for concurrent access) keeps the crawl finite.
+- **Scope enforcement** — URLs outside the allowlist are never enqueued.
+- **Canonicalization + dedup** — `?id=1` and `?id=2` aren't scanned as separate pages forever; a visited set keeps the crawl finite.
 - **Form + link discovery** — extracts links to follow and forms/params to test.
 
-The crawler's only job is to *find* injection points; testing them is the detection
-engine's job. Keeping them separate is what makes both modes fall out of one codebase.
-
-> Note: crawl mode currently follows server-rendered links and forms. JavaScript-rendered
-> single-page apps (which need a headless browser) are a later addition — server-rendered
-> targets like DVWA are fully covered.
+The crawler's finds injection points; testing them is the detection engine's job.
 
 ### The detection engine
 
@@ -54,16 +49,12 @@ testing.
 
 - **Dedup at the queue** — the crawler reports one form per field *per page*, so a search
   box in a site-wide header arrives once for every page on the site. The engine keys
-  injection points on `method + url + field`, which is the difference between 4 targets
-  and 64 on a 16-page app.
+  injection points on `method + url + field`.
 - **Fields tested together** — Form extraction flattens a `<form>` into one
   record per field, a page's forms are published as one batch, so regrouping them by `(method, action)` 
   recovers which fields belong to the same submission.
 - **One client, one pool** — the crawl and the engine hammer a single host at the same
-  time, so they share an HTTP client. Two pools would only compete for ephemeral ports.
-- **Serial checks per target, parallel across targets** — parallelism across endpoints
-  already keeps the workers busy; stacking a whole suite onto one endpoint at once just
-  buries the app.
+  time, so they share an HTTP client.
 
 ---
 
@@ -76,8 +67,7 @@ vet check --target http://localhost:8080/login --scope localhost:8080 --params u
 ```
 
 **Crawl** — Supply a domain. Vet discovers endpoints and forms across it (respecting
-scope) and runs the detection suite on each injection point *as it is found*, so findings
-print during the scan rather than at the end.
+scope) and runs the detection suite on each injection point.
 
 ```bash
 vet scan --domain http://localhost:8080 --scope localhost:8080
