@@ -97,7 +97,7 @@ func runScan(ctx context.Context, args []string) error {
 	// The engine shares the crawler's client, so the two phases share one
 	// connection pool rather than competing for ephemeral ports against the
 	// same host while they run side by side.
-	eng := engine.New(c.Client(), *checkWorkers, checks.ReflectedXSS{})
+	eng := engine.New(c.Client(), *checkWorkers, checks.ReflectedXSS{}, checks.SQLError{})
 	eng.OnFinding(func(f finding.Finding) { fmt.Println(f) })
 
 	// Both must be in place before the crawl starts: the workers park on an

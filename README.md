@@ -84,7 +84,7 @@ actually serve at once.
 | Check | Strategy | Notes |
 |-------|----------|-------|
 | **Reflected XSS** | Probe with a random marker to locate the reflection *and its HTML context*, then send a context-specific payload and re-parse the response. | Confirmed only when the parser agrees the marker came back as a **new element or attribute**. |
-| **SQLi (error-based)** | N/A | N/A |
+| **SQLi (error-based)** | Insert a quote into the field and look for a database error in the response. | Reads JSON as readily as HTML. |
 | **SQLi (boolean-based)** | N/A | N/A |
 | **SQLi (time-based / blind)** | N/A | N/A |
 
